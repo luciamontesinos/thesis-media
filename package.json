@@ -1,0 +1,7 @@
+{
+  "name": "thesis-media",
+  "private": true,
+  "scripts": {
+    "start": "npx serve ."
+  }
+}

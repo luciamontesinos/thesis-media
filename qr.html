@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Codes — Supplementary Material</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: #f9f8f5;
+      color: #1a1a1a;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 1.2rem;
+      font-weight: normal;
+      margin-bottom: 0.4rem;
+    }
+
+    .instructions {
+      font-size: 0.85rem;
+      color: #888;
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card canvas {
+      display: block;
+    }
+
+    .card .label {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      color: #555;
+      text-align: center;
+    }
+
+    .card .title {
+      font-size: 0.78rem;
+      color: #888;
+      text-align: center;
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    .card .url-text {
+      font-size: 0.65rem;
+      color: #bbb;
+      word-break: break-all;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+    }
+
+    @media print {
+      body { background: #fff; padding: 1rem; }
+      .instructions { display: none; }
+      #grid { gap: 1.5rem; }
+      .card { break-inside: avoid; border: 1px solid #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <h1>QR Codes — Supplementary Material</h1>
+  <p class="instructions">Use Cmd+P (Mac) or Ctrl+P (Windows) to print this page, or right-click any QR code to save it as an image.</p>
+
+  <div id="grid"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="media.js"></script>
+  <script>
+    // Build base URL: same origin + path up to qr.html, then index.html#id
+    const base = window.location.href.replace(/qr\.html.*$/, 'index.html');
+
+    const grid = document.getElementById('grid');
+
+    MEDIA.forEach(function(item) {
+      const url = base + '#' + item.id;
+
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const canvas = document.createElement('canvas');
+      card.appendChild(canvas);
+
+      QRCode.toCanvas(canvas, url, { width: 160, margin: 1 }, function(err) {
+        if (err) console.error(err);
+      });
+
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = item.id;
+      card.appendChild(label);
+
+      const title = document.createElement('div');
+      title.className = 'title';
+      title.textContent = item.title;
+      card.appendChild(title);
+
+      const urlText = document.createElement('div');
+      urlText.className = 'url-text';
+      urlText.textContent = url;
+      card.appendChild(urlText);
+
+      grid.appendChild(card);
+    });
+  </script>
+</body>
+</html>

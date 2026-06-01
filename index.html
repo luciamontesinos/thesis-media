@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supplementary Material</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: #f9f8f5;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #page-header {
+      padding: 1.5rem 2rem 1rem;
+      border-bottom: 1px solid #ddd;
+      background: #fff;
+    }
+
+    #page-header .site-label {
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.3rem;
+    }
+
+    #item-label {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #888;
+      letter-spacing: 0.06em;
+    }
+
+    #item-title {
+      font-size: 1.35rem;
+      font-weight: normal;
+      margin-top: 0.3rem;
+      line-height: 1.4;
+    }
+
+    main {
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #media-container {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      min-height: 280px;
+    }
+
+    #media-container iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      background: #000;
+    }
+
+    #media-container img {
+      max-width: 100%;
+      max-height: 62vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    #media-container audio {
+      width: 100%;
+    }
+
+    #item-caption {
+      font-size: 0.88rem;
+      color: #666;
+      font-style: italic;
+      line-height: 1.65;
+      margin-bottom: 1.75rem;
+      min-height: 1.2em;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 1.25rem;
+    }
+
+    nav button {
+      background: none;
+      border: 1px solid #bbb;
+      padding: 0.45rem 1.1rem;
+      cursor: pointer;
+      font-family: Georgia, serif;
+      font-size: 0.88rem;
+      color: #333;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      white-space: nowrap;
+    }
+
+    nav button:hover:not(:disabled) {
+      background: #1a1a1a;
+      color: #fff;
+      border-color: #1a1a1a;
+    }
+
+    nav button:disabled {
+      opacity: 0.28;
+      cursor: default;
+    }
+
+    #counter {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      color: #aaa;
+      flex: 1;
+      text-align: center;
+    }
+
+    #not-found {
+      display: none;
+      text-align: center;
+      color: #aaa;
+      font-style: italic;
+      padding: 4rem 1rem;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="page-header">
+    <div class="site-label">Supplementary Material</div>
+    <div id="item-label"></div>
+    <h1 id="item-title"></h1>
+  </div>
+
+  <main>
+    <div id="not-found">Item not found. Check the URL.</div>
+    <div id="media-container"></div>
+    <p id="item-caption"></p>
+    <nav>
+      <button id="prev-btn">&#8592; Prev</button>
+      <span id="counter"></span>
+      <button id="next-btn">Next &#8594;</button>
+    </nav>
+  </main>
+
+  <script src="media.js"></script>
+  <script>
+    function youtubeId(url) {
+      const m = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+      return m ? m[1] : null;
+    }
+
+    function renderMedia(item) {
+      const c = document.getElementById('media-container');
+      c.innerHTML = '';
+
+      if (item.type === 'youtube') {
+        const id = youtubeId(item.url);
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/' + id;
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+        c.appendChild(iframe);
+
+      } else if (item.type === 'image') {
+        const img = document.createElement('img');
+        img.src = item.url;
+        img.alt = item.title;
+        c.appendChild(img);
+
+      } else if (item.type === 'audio') {
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'width:100%;padding:2rem 0;';
+        const audio = document.createElement('audio');
+        audio.controls = true;
+        audio.style.width = '100%';
+        audio.src = item.url;
+        wrap.appendChild(audio);
+        c.appendChild(wrap);
+      }
+    }
+
+    function show(index) {
+      const item = MEDIA[index];
+      const notFound = document.getElementById('not-found');
+      const mediaContainer = document.getElementById('media-container');
+
+      if (!item) {
+        notFound.style.display = 'block';
+        mediaContainer.style.display = 'none';
+        return;
+      }
+
+      notFound.style.display = 'none';
+      mediaContainer.style.display = 'flex';
+
+      document.getElementById('item-label').textContent = item.id;
+      document.getElementById('item-title').textContent = item.title;
+      document.getElementById('item-caption').textContent = item.caption || '';
+      document.getElementById('counter').textContent = (index + 1) + ' / ' + MEDIA.length;
+      document.getElementById('prev-btn').disabled = index === 0;
+      document.getElementById('next-btn').disabled = index === MEDIA.length - 1;
+      document.title = item.id + ' — ' + item.title;
+
+      renderMedia(item);
+    }
+
+    function currentIndex() {
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const i = MEDIA.findIndex(function(m) { return m.id === hash; });
+        if (i !== -1) return i;
+      }
+      return 0;
+    }
+
+    document.getElementById('prev-btn').addEventListener('click', function() {
+      const i = currentIndex();
+      if (i > 0) window.location.hash = MEDIA[i - 1].id;
+    });
+
+    document.getElementById('next-btn').addEventListener('click', function() {
+      const i = currentIndex();
+      if (i < MEDIA.length - 1) window.location.hash = MEDIA[i + 1].id;
+    });
+
+    window.addEventListener('hashchange', function() { show(currentIndex()); });
+    show(currentIndex());
+  </script>
+</body>
+</html>
