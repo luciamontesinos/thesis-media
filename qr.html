@@ -43,8 +43,10 @@
       gap: 0.75rem;
     }
 
-    .card canvas {
+    .card img {
       display: block;
+      width: 160px;
+      height: 160px;
     }
 
     .card .label {
@@ -84,12 +86,9 @@
 
   <div id="grid"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <script src="media.js"></script>
   <script>
-    // Build base URL: same origin + path up to qr.html, then index.html#id
     const base = window.location.href.replace(/qr\.html.*$/, 'index.html');
-
     const grid = document.getElementById('grid');
 
     MEDIA.forEach(function(item) {
@@ -98,12 +97,10 @@
       const card = document.createElement('div');
       card.className = 'card';
 
-      const canvas = document.createElement('canvas');
-      card.appendChild(canvas);
-
-      QRCode.toCanvas(canvas, url, { width: 160, margin: 1 }, function(err) {
-        if (err) console.error(err);
-      });
+      const img = document.createElement('img');
+      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=6&data=' + encodeURIComponent(url);
+      img.alt = item.id;
+      card.appendChild(img);
 
       const label = document.createElement('div');
       label.className = 'label';
