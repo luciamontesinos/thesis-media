@@ -1,53 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Supplementary Material</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg:         #ffffff;
+      --text:       #1a1a1a;
+      --accent:     #FF0000;
+      --subtle:     #666;
+      --border:     #e0e0e0;
+      --hover-bg:   #1a1a1a;
+      --hover-text: #ffffff;
+    }
+    [data-theme="dark"] {
+      --bg:         #0d0d0d;
+      --text:       #ebebeb;
+      --accent:     #FF0000;
+      --subtle:     #999;
+      --border:     #2a2a2a;
+      --hover-bg:   #ebebeb;
+      --hover-text: #0d0d0d;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: Georgia, 'Times New Roman', serif;
-      background: #f9f8f5;
-      color: #1a1a1a;
+      font-family: 'Newsreader', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      transition: background 0.2s, color 0.2s;
     }
 
-    #page-header {
-      padding: 1.5rem 2rem 1rem;
-      border-bottom: 1px solid #ddd;
-      background: #fff;
+    /* ── nav ── */
+    .site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 2rem;
+      border-bottom: 1px solid var(--border);
     }
 
-    #page-header .site-label {
-      font-family: 'Courier New', monospace;
-      font-size: 0.75rem;
-      color: #aaa;
+    .site-name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      margin-bottom: 0.3rem;
+      color: var(--subtle);
+      text-decoration: none;
     }
 
-    #item-label {
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      color: #888;
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--subtle);
+      text-decoration: none;
       letter-spacing: 0.06em;
     }
 
-    #item-title {
-      font-size: 1.35rem;
-      font-weight: normal;
-      margin-top: 0.3rem;
-      line-height: 1.4;
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── item header ── */
+    #item-header {
+      padding: 1.5rem 2rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
     }
 
+    #item-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    #item-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 0.35rem;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    /* ── main ── */
     main {
       flex: 1;
-      max-width: 860px;
+      max-width: 900px;
       width: 100%;
       margin: 0 auto;
       padding: 2rem 2rem 1.5rem;
@@ -79,72 +137,105 @@
       display: block;
     }
 
-    #media-container audio {
-      width: 100%;
-    }
-
     #item-caption {
-      font-size: 0.88rem;
-      color: #666;
+      font-size: 0.92rem;
+      color: var(--subtle);
       font-style: italic;
-      line-height: 1.65;
+      line-height: 1.7;
       margin-bottom: 1.75rem;
       min-height: 1.2em;
     }
 
-    nav {
+    /* ── prev/next ── */
+    nav.item-nav {
       display: flex;
       align-items: center;
       gap: 1rem;
-      border-top: 1px solid #e0e0e0;
+      border-top: 1px solid var(--border);
       padding-top: 1.25rem;
     }
 
-    nav button {
+    nav.item-nav button {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
       background: none;
-      border: 1px solid #bbb;
+      border: 1px solid var(--border);
       padding: 0.45rem 1.1rem;
       cursor: pointer;
-      font-family: Georgia, serif;
-      font-size: 0.88rem;
-      color: #333;
+      color: var(--text);
+      letter-spacing: 0.03em;
       transition: background 0.12s, color 0.12s, border-color 0.12s;
-      white-space: nowrap;
     }
 
-    nav button:hover:not(:disabled) {
-      background: #1a1a1a;
-      color: #fff;
-      border-color: #1a1a1a;
+    nav.item-nav button:hover:not(:disabled) {
+      background: var(--hover-bg);
+      color: var(--hover-text);
+      border-color: var(--hover-bg);
     }
 
-    nav button:disabled {
-      opacity: 0.28;
-      cursor: default;
-    }
+    nav.item-nav button:disabled { opacity: 0.25; cursor: default; }
 
     #counter {
-      font-family: 'Courier New', monospace;
-      font-size: 0.8rem;
-      color: #aaa;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--accent);
       flex: 1;
       text-align: center;
+      letter-spacing: 0.06em;
     }
 
     #not-found {
       display: none;
       text-align: center;
-      color: #aaa;
+      color: var(--subtle);
       font-style: italic;
       padding: 4rem 1rem;
-      font-size: 1rem;
+    }
+
+    /* ── theme toggle ── */
+    #theme-toggle {
+      position: fixed;
+      bottom: 1.75rem;
+      right: 1.75rem;
+      z-index: 50;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--subtle);
+      padding: 0.35rem 0.85rem;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    #theme-toggle:hover {
+      background: var(--hover-bg);
+      color: var(--hover-text);
+      border-color: var(--hover-bg);
     }
   </style>
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
 </head>
 <body>
 
-  <div id="page-header">
-    <div class="site-label">Supplementary Material</div>
+  <nav class="site-nav">
+    <a href="index.html" class="site-name">Supplementary Material</a>
+    <div class="nav-links">
+      <a href="index.html">Figures</a>
+      <a href="info.html">About</a>
+    </div>
+  </nav>
+
+  <div id="item-header">
     <div id="item-label"></div>
     <h1 id="item-title"></h1>
   </div>
@@ -153,42 +244,56 @@
     <div id="not-found">Item not found. Check the URL.</div>
     <div id="media-container"></div>
     <p id="item-caption"></p>
-    <nav>
+    <nav class="item-nav">
       <button id="prev-btn">&#8592; Prev</button>
       <span id="counter"></span>
       <button id="next-btn">Next &#8594;</button>
     </nav>
   </main>
 
+  <button id="theme-toggle" onclick="toggleTheme()"></button>
+
   <script src="media.js"></script>
   <script>
+    function toggleTheme() {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateToggleLabel();
+    }
+
+    function updateToggleLabel() {
+      var t = document.documentElement.getAttribute('data-theme');
+      document.getElementById('theme-toggle').textContent = t === 'dark' ? 'Light' : 'Dark';
+    }
+
     function youtubeId(url) {
-      const m = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+      var m = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
       return m ? m[1] : null;
     }
 
     function renderMedia(item) {
-      const c = document.getElementById('media-container');
+      var c = document.getElementById('media-container');
       c.innerHTML = '';
 
       if (item.type === 'youtube') {
-        const id = youtubeId(item.url);
-        const iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube.com/embed/' + id;
+        var iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/' + youtubeId(item.url);
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
         iframe.allowFullscreen = true;
         c.appendChild(iframe);
 
       } else if (item.type === 'image') {
-        const img = document.createElement('img');
+        var img = document.createElement('img');
         img.src = item.url;
         img.alt = item.title;
         c.appendChild(img);
 
       } else if (item.type === 'audio') {
-        const wrap = document.createElement('div');
+        var wrap = document.createElement('div');
         wrap.style.cssText = 'width:100%;padding:2rem 0;';
-        const audio = document.createElement('audio');
+        var audio = document.createElement('audio');
         audio.controls = true;
         audio.style.width = '100%';
         audio.src = item.url;
@@ -198,9 +303,9 @@
     }
 
     function show(index) {
-      const item = MEDIA[index];
-      const notFound = document.getElementById('not-found');
-      const mediaContainer = document.getElementById('media-container');
+      var item = MEDIA[index];
+      var notFound = document.getElementById('not-found');
+      var mediaContainer = document.getElementById('media-container');
 
       if (!item) {
         notFound.style.display = 'block';
@@ -219,29 +324,36 @@
       document.getElementById('next-btn').disabled = index === MEDIA.length - 1;
       document.title = item.id + ' — ' + item.title;
 
+      localStorage.setItem('lastFigure', item.id);
       renderMedia(item);
     }
 
     function currentIndex() {
-      const hash = window.location.hash.slice(1);
+      var hash = window.location.hash.slice(1);
       if (hash) {
-        const i = MEDIA.findIndex(function(m) { return m.id === hash; });
+        var i = MEDIA.findIndex(function(m) { return m.id === hash; });
+        if (i !== -1) return i;
+      }
+      var last = localStorage.getItem('lastFigure');
+      if (last) {
+        var i = MEDIA.findIndex(function(m) { return m.id === last; });
         if (i !== -1) return i;
       }
       return 0;
     }
 
     document.getElementById('prev-btn').addEventListener('click', function() {
-      const i = currentIndex();
+      var i = currentIndex();
       if (i > 0) window.location.hash = MEDIA[i - 1].id;
     });
 
     document.getElementById('next-btn').addEventListener('click', function() {
-      const i = currentIndex();
+      var i = currentIndex();
       if (i < MEDIA.length - 1) window.location.hash = MEDIA[i + 1].id;
     });
 
     window.addEventListener('hashchange', function() { show(currentIndex()); });
+    updateToggleLabel();
     show(currentIndex());
   </script>
 </body>

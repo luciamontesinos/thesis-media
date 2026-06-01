@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Codes — Supplementary Material</title>
+  <title>About — Supplementary Material</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg:         #ffffff;
@@ -75,71 +75,90 @@
     .nav-links a:hover { color: var(--text); }
 
     main {
-      padding: 2.5rem 2rem 5rem;
+      max-width: 640px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
     }
 
     h1 {
       font-family: 'Outfit', sans-serif;
-      font-weight: 400;
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
       color: var(--text);
     }
 
-    .instructions {
-      font-size: 0.88rem;
-      color: var(--subtle);
-      font-style: italic;
-      margin-bottom: 2.5rem;
-      line-height: 1.6;
-    }
-
-    #grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: 2rem;
-    }
-
-    .card {
-      border: 1px solid var(--border);
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.7rem;
-    }
-
-    .card img {
-      display: block;
-      width: 160px;
-      height: 160px;
-    }
-
-    .card .label {
+    h2 {
       font-family: 'Outfit', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 500;
+      font-weight: 400;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--accent);
-      text-align: center;
-      letter-spacing: 0.06em;
+      margin-top: 2.5rem;
+      margin-bottom: 0.9rem;
     }
 
-    .card .title {
-      font-size: 0.8rem;
-      color: var(--subtle);
-      text-align: center;
-      font-style: italic;
+    p {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    p a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    p a:hover { text-decoration: underline; }
+
+    /* ── figure list ── */
+    #figure-list {
+      margin-top: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .figure-row {
+      display: grid;
+      grid-template-columns: 7rem 1fr 4.5rem;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      transition: color 0.12s;
+    }
+
+    .figure-row:hover { color: var(--subtle); }
+
+    .fig-id {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+
+    .fig-title {
+      font-size: 0.97rem;
       line-height: 1.4;
     }
 
-    .card .url-text {
-      font-size: 0.6rem;
-      color: var(--border);
-      word-break: break-all;
-      text-align: center;
-      font-family: 'Outfit', monospace;
+    .fig-type {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      text-align: right;
     }
 
+    /* ── theme toggle ── */
     #theme-toggle {
       position: fixed;
       bottom: 1.75rem;
@@ -150,7 +169,7 @@
       font-weight: 400;
       background: var(--bg);
       border: 1px solid var(--border);
-      color: var(--accent);
+      color: var(--subtle);
       padding: 0.35rem 0.85rem;
       cursor: pointer;
       letter-spacing: 0.06em;
@@ -161,14 +180,6 @@
       background: var(--hover-bg);
       color: var(--hover-text);
       border-color: var(--hover-bg);
-    }
-
-    @media print {
-      body { background: #fff; }
-      .site-nav, .instructions, #theme-toggle { display: none; }
-      main { padding: 1rem; }
-      #grid { gap: 1.5rem; }
-      .card { break-inside: avoid; border: 1px solid #ccc; }
     }
   </style>
   <script>
@@ -189,12 +200,30 @@
   </nav>
 
   <main>
-    <h1>QR Codes</h1>
-    <p class="instructions">
-      Cmd+P / Ctrl+P to print, or right-click any image to save it.<br>
-      Generate these only after the site is deployed — the codes encode the live URL.
+    <h1>Supplementary<br>Audiovisual Material</h1>
+
+    <h2>About this site</h2>
+    <p>
+      This website is a companion to the PhD dissertation
+      <em><!-- Insert your thesis title here --></em>
+      by Lucia Montesinos<!-- (Institution, Year) -->.
     </p>
-    <div id="grid"></div>
+    <p>
+      Throughout the thesis, certain passages are accompanied by audiovisual material —
+      recordings, images, and video excerpts — that complement or extend the written argument.
+      This site collects all of that material in one place.
+    </p>
+
+    <h2>How to navigate</h2>
+    <p>
+      Each figure in the thesis carries a QR code or short URL. Scanning or following it opens
+      that specific item directly. Once on the site, you can move through the full collection
+      using the <em>Prev</em> and <em>Next</em> buttons, or jump to any item from the
+      <a href="index.html">list of figures</a> below.
+    </p>
+
+    <h2>List of figures</h2>
+    <div id="figure-list"></div>
   </main>
 
   <button id="theme-toggle" onclick="toggleTheme()"></button>
@@ -214,36 +243,29 @@
       document.getElementById('theme-toggle').textContent = t === 'dark' ? 'Light' : 'Dark';
     }
 
-    var base = window.location.href.replace(/qr\.html.*$/, 'index.html');
-    var grid = document.getElementById('grid');
+    var list = document.getElementById('figure-list');
 
     MEDIA.forEach(function(item) {
-      var url = base + '#' + item.id;
+      var a = document.createElement('a');
+      a.className = 'figure-row';
+      a.href = 'index.html#' + item.id;
 
-      var card = document.createElement('div');
-      card.className = 'card';
+      var id = document.createElement('span');
+      id.className = 'fig-id';
+      id.textContent = item.id;
 
-      var img = document.createElement('img');
-      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=6&data=' + encodeURIComponent(url);
-      img.alt = item.id;
-      card.appendChild(img);
-
-      var label = document.createElement('div');
-      label.className = 'label';
-      label.textContent = item.id;
-      card.appendChild(label);
-
-      var title = document.createElement('div');
-      title.className = 'title';
+      var title = document.createElement('span');
+      title.className = 'fig-title';
       title.textContent = item.title;
-      card.appendChild(title);
 
-      var urlText = document.createElement('div');
-      urlText.className = 'url-text';
-      urlText.textContent = url;
-      card.appendChild(urlText);
+      var type = document.createElement('span');
+      type.className = 'fig-type';
+      type.textContent = item.type;
 
-      grid.appendChild(card);
+      a.appendChild(id);
+      a.appendChild(title);
+      a.appendChild(type);
+      list.appendChild(a);
     });
 
     updateToggleLabel();
