@@ -3,8 +3,9 @@
 //  Each item needs:
 //    id      – matches the label in your thesis (used in the URL)
 //    title   – shown on the page
-//    type    – "youtube" | "image" | "audio"
-//    url     – full URL to the resource
+//    type    – "youtube" | "image" | "audio" | "model"
+//    url     – full URL or relative path to the resource
+//              (for "model", point to a local viewer HTML, e.g. "models/tubularium/index.html")
 //    caption – (optional) short description
 // ─────────────────────────────────────────────────────────────────
 
@@ -29,5 +30,12 @@ const MEDIA = [
     type: "audio",
     url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     caption: "Audio clip caption."
+  },
+  {
+    id: "fig-4",
+    title: "Tubularium — interactive 3D model",
+    type: "model",
+    url: "models/tubularium/index.html",
+    caption: "Drag to orbit, scroll to zoom. Switch between structure and sequence modes."
   }
 ];

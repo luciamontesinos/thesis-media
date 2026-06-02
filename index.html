@@ -130,6 +130,11 @@
       background: #000;
     }
 
+    #media-container iframe.model-frame {
+      aspect-ratio: 4 / 3;
+      border-radius: 2px;
+    }
+
     #media-container img {
       max-width: 100%;
       max-height: 62vh;
@@ -299,6 +304,13 @@
         audio.src = item.url;
         wrap.appendChild(audio);
         c.appendChild(wrap);
+
+      } else if (item.type === 'model') {
+        var iframe = document.createElement('iframe');
+        iframe.src = item.url;
+        iframe.className = 'model-frame';
+        iframe.allow = 'accelerometer; gyroscope';
+        c.appendChild(iframe);
       }
     }
 
