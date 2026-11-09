@@ -2,37 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Picnic Scene</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Picnic – interactive model</title>
+  <link rel="stylesheet" href="../shared/style.css" />
   <style>
-    html, body { margin: 0; height: 100%; background: #050506; overflow: hidden; font-family: system-ui, sans-serif; }
-    canvas { display: block; }
-    #hint {
-      position: fixed; left: 12px; bottom: 12px; color: #ccc; background: rgba(0,0,0,0.45);
-      padding: 10px 14px; border-radius: 8px; font-size: 12px; line-height: 1.6; max-width: 320px;
-      pointer-events: none; user-select: none;
-    }
-    #hint b { color: #fff; }
-    #loading {
-      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
-      color: #999; font-size: 14px; letter-spacing: 0.05em; z-index: 10;
-    }
-    #resetBtn {
-      position: fixed; top: 12px; right: 12px; z-index: 5;
-      background: rgba(20,20,22,0.75); color: #eee; border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 6px; padding: 8px 14px; font-size: 12px; font-family: inherit;
-      cursor: pointer;
-    }
-    #resetBtn:hover { background: rgba(40,40,44,0.85); }
+    /* step-sequencer readout: one row per instrument, one cell per 16th note */
+    #seq { display: grid; gap: 2px; margin-top: 8px; }
+    .seq-row { display: grid; grid-template-columns: 4.6em 1fr; align-items: center; gap: 6px; }
+    .seq-name { font-size: 11px; opacity: .75; white-space: nowrap; }
+    .seq-cells { display: grid; grid-template-columns: repeat(16, 1fr); gap: 1px; }
+    .seq-cells i { height: 9px; border-radius: 1px; background: var(--panel-line); }
+    .seq-cells i:nth-child(4n+1) { background: rgba(0,0,0,.2); }
+    .seq-cells i.on { background: var(--accent); }
+    .seq-cells i.now { outline: 1px solid var(--panel-ink); outline-offset: 0; }
+    .seq-cells i.on.now { background: var(--panel-ink); }
   </style>
 </head>
 <body>
   <div id="loading">Loading picnic scene…</div>
-  <button id="resetBtn" hidden>Reset layout</button>
-  <div id="hint">
-    <b>Camera</b> — left-drag: orbit · right-drag: pan · wheel: zoom<br/>
-    <b>Play</b> — click to hold an object <br/>
-     drag and let go to throw it.
-  </div>
+
+  <details id="hud" open>
+    <summary>Controls</summary>
+    <div class="hud-body">
+      <div class="note">120 BPM · 16th-note grid · one bar</div>
+      <div id="seq"></div>
+      <div class="btns"><button id="resetBtn" hidden>Reset layout</button></div>
+    </div>
+  </details>
+  <div id="toast"></div>
 
   <script type="importmap">
   {

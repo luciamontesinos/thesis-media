@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { createStage, initHud, setupRenderer } from '../shared/stage.js';
+import { createDrumLoop, TRACKS, STEPS } from './drums.js';
 
 /* ------------------------------------------------------------------
    Starting layout. Every value here is just a reasonable default —
@@ -178,20 +180,16 @@ function physicsRadiusFor(name, scale) {
    Renderer / scene / camera
 ------------------------------------------------------------------ */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
+setupRenderer(renderer);
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x050506);
-scene.fog = new THREE.Fog(0x050506, 220, 520);
+// Same backdrop, floor, grid (1 m squares — this scene is in centimetres) and lights as the other models.
+// The blanket is flattened (see init) so everything lies on it; the floor sits just beneath it.
+createStage(scene, { unit: 100, floorY: 3.5, shadowExtent: 1.2 });
+initHud();
 
-const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 2000);
+const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 5000);
 camera.position.set(13, 76, 128);
 
 const orbit = new OrbitControls(camera, renderer.domElement);
@@ -202,44 +200,6 @@ orbit.maxPolarAngle = Math.PI * 0.495;
 orbit.minDistance = 30;
 orbit.maxDistance = 500;
 orbit.update();
-
-/* ------------------------------------------------------------------
-   Stage floor (keeps the dark background from looking like a void
-   right at the edge of the blanket, and catches soft shadow/spill)
------------------------------------------------------------------- */
-// The cloth has wrinkles that dip well below y=0 (down to about -5), so the
-// floor sits comfortably below that to avoid poking through the folds.
-const stageFloor = new THREE.Mesh(
-  new THREE.CircleGeometry(400, 64),
-  new THREE.MeshStandardMaterial({ color: 0x08080a, roughness: 1, metalness: 0 })
-);
-stageFloor.rotation.x = -Math.PI / 2;
-stageFloor.position.y = -10;
-stageFloor.receiveShadow = true;
-scene.add(stageFloor);
-
-/* ------------------------------------------------------------------
-   Lighting — a single soft spotlight, as if on a small stage, with a
-   faint fill so shadows don't crush to pure black. The angle/position
-   are sized so the full ~170-unit-wide blanket sits inside the cone
-   with margin, and a wide penumbra keeps the falloff gradual instead
-   of a hard cutoff line across the cloth.
------------------------------------------------------------------- */
-const spot = new THREE.SpotLight(0xfff2e0, 1100, 700, THREE.MathUtils.degToRad(46), 0.6, 1.15);
-spot.position.set(20, 220, 20);
-spot.target.position.set(0, 8, 0);
-spot.castShadow = true;
-spot.shadow.mapSize.set(2048, 2048);
-spot.shadow.bias = -0.0003;
-spot.shadow.radius = 6;
-scene.add(spot, spot.target);
-
-const fill = new THREE.HemisphereLight(0x30323a, 0x08080a, 0.4);
-scene.add(fill);
-
-const rim = new THREE.DirectionalLight(0x445566, 0.25);
-rim.position.set(80, 60, -120);
-scene.add(rim);
 
 /* ------------------------------------------------------------------
    Loading helpers
@@ -419,6 +379,18 @@ async function init() {
   ]);
 
   [blanketObj, basketObj, dinnerwareObj, glassObj].forEach(applyShadows);
+  // The exported cloth is wrinkled (y from -5 to +5), which made the objects float or sink. Swap its geometry for a
+  // plain flat square (170 × 170, same size and same gingham tiling) so everything lies on top.
+  blanketObj.traverse((c) => {
+    if (!c.isMesh) return;
+    const plane = new THREE.PlaneGeometry(170, 170);
+    plane.rotateX(-Math.PI / 2);
+    plane.translate(0, GROUND_Y - 0.1, 0);
+    const uv = plane.attributes.uv;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * 40.476, uv.getY(i) * 40.476);
+    c.geometry.dispose();
+    c.geometry = plane;
+  });
   // the blanket only needs to receive shadows, not cast them onto itself oddly
   blanketObj.traverse((c) => { if (c.isMesh) c.castShadow = false; });
 
@@ -553,9 +525,99 @@ async function init() {
     }
   }
 
+  registerFlashables();
   document.getElementById('loading').remove();
   setupResetButton();
   animate();
+}
+
+/* ------------------------------------------------------------------
+   Sound — every kind of object is one percussion instrument:
+     cup → Snare · bowl → Kick 1 · large plate → Hi-Hat 1 · small plate → Hi-Hat 2
+     cutlery → Clap · basket → Kick 2 · glass → clears the loop
+   Clicking an object plays its sound and adds a hit to that instrument's
+   track in a 120 BPM, one-bar loop, snapped to the nearest 16th note.
+------------------------------------------------------------------ */
+function soundTypeOf(name) {
+  if (name === 'glass') return 'reset';
+  if (name === 'basket') return 'kick2';
+  if (name.startsWith('plate')) return 'hat1';
+  if (name.startsWith('square')) return 'hat2';
+  if (name.startsWith('bowl')) return 'kick1';
+  if (name.startsWith('cup')) return 'snare';
+  if (name.startsWith('cutlery')) return 'clap';
+  return null;
+}
+
+const toastEl = document.getElementById('toast');
+let toastTimer = 0;
+function toast(msg, ms = 1800) {
+  toastEl.textContent = msg;
+  toastEl.style.opacity = 1;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toastEl.style.opacity = 0; }, ms);
+}
+
+// step-sequencer readout in the control panel
+const seqEl = document.getElementById('seq');
+const seqCells = {};
+for (const t of TRACKS) {
+  const row = document.createElement('div');
+  row.className = 'seq-row';
+  row.innerHTML = `<span class="seq-name">${t.name}</span><span class="seq-cells">${'<i></i>'.repeat(STEPS)}</span>`;
+  seqEl.appendChild(row);
+  seqCells[t.id] = [...row.querySelectorAll('i')];
+}
+function drawPattern(pattern) {
+  for (const t of TRACKS) seqCells[t.id].forEach((c, i) => c.classList.toggle('on', pattern[t.id][i]));
+}
+let shownStep = -1;
+function drawPlayhead() {
+  const step = drums.currentStep();
+  if (step === shownStep) return;
+  for (const t of TRACKS) {
+    if (shownStep >= 0) seqCells[t.id][shownStep].classList.remove('now');
+    if (step >= 0) seqCells[t.id][step].classList.add('now');
+  }
+  shownStep = step;
+}
+
+const drums = createDrumLoop({ onChange: drawPattern });
+
+// only the object that was played lights up (not every copy of its kind), in time with its sound
+const flashLevel = {};   // object name -> 0..1
+const flashMats = {};    // object name -> [{ mat, base }]
+function registerFlashables() {
+  for (const [name, holder] of Object.entries(objects)) {
+    if (!soundTypeOf(name)) continue;
+    holder.traverse((c) => {
+      if (!c.isMesh) return;
+      const mats = Array.isArray(c.material) ? c.material : [c.material];
+      mats.forEach((mat) => {
+        if (mat && mat.emissive) (flashMats[name] ??= []).push({ mat, base: mat.emissive.clone() });
+      });
+    });
+  }
+}
+function updateFlashes(dt) {
+  for (const name of drums.drainFlashes()) if (name) flashLevel[name] = 1;
+  for (const name in flashLevel) {
+    const k = flashLevel[name] = Math.max(0, flashLevel[name] - dt * 3.5);
+    for (const { mat, base } of flashMats[name] || []) mat.emissive.copy(base).addScalar(k * 0.4);
+  }
+}
+
+function handleClick(name) {
+  const type = soundTypeOf(name);
+  if (!type) return;
+  if (type === 'reset') {
+    drums.clear();
+    flashLevel[name] = 1;
+    toast('Loop cleared');
+    return;
+  }
+  drums.hit(type, name);
+  flashLevel[name] = 1;
 }
 
 /* ------------------------------------------------------------------
@@ -571,6 +633,9 @@ const dragPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -GROUND_Y);
 const dragGroundHit = new THREE.Vector3();
 const dragOffset = new THREE.Vector2();
 let dragTarget = null; // the holder currently being dragged, or null
+let dragMoved = false; // true once the pointer has travelled far enough to count as a drag, not a click
+let press = null;      // the object under the pointer since pointerdown: { name, sx, sy }
+const CLICK_SLOP = 6;  // px of movement still counted as a click
 
 function setPointerFromEvent(event) {
   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -581,9 +646,9 @@ function grab(name) {
   const holder = objects[name];
   if (!holder || !holder.userData.physics) return;
   dragTarget = holder;
+  dragMoved = false;
   orbit.enabled = false;
   const p = holder.userData.physics;
-  p.active = true;
   p.vx = 0; p.vy = 0; p.vz = 0;
   raycaster.setFromCamera(pointer, camera);
   raycaster.ray.intersectPlane(dragPlane, dragGroundHit);
@@ -593,7 +658,7 @@ function grab(name) {
 }
 
 function release() {
-  if (dragTarget) {
+  if (dragTarget && dragMoved) {
     const p = dragTarget.userData.physics;
     // A fast release pops the piece into the air (see updatePhysics's
     // gravity step), scaled off how fast it was moving when let go — a
@@ -602,28 +667,42 @@ function release() {
     p.vy = Math.min(speed * TOSS_FACTOR, MAX_TOSS_VY);
   }
   dragTarget = null;
+  dragMoved = false;
   orbit.enabled = true;
 }
 
 renderer.domElement.addEventListener('pointerdown', (event) => {
   if (event.target !== renderer.domElement) return;
+  drums.unlock();   // browsers only start audio from inside a user gesture
   setPointerFromEvent(event);
   raycaster.setFromCamera(pointer, camera);
-  const draggable = Object.values(objects).filter((h) => h.userData.physics);
-  const hits = raycaster.intersectObjects(draggable, true);
+  const clickable = Object.values(objects).filter((h) => h.name !== 'blanket');
+  const hits = raycaster.intersectObjects(clickable, true);
   if (!hits.length) return;
   let obj = hits[0].object;
   while (obj && !obj.userData.isHolder) obj = obj.parent;
-  if (obj) grab(obj.name);
+  if (!obj) return;
+  press = { name: obj.name, sx: event.clientX, sy: event.clientY };
+  grab(obj.name);   // does nothing for the basket, which is fixed in place
 });
 
 window.addEventListener('pointermove', (event) => {
   if (dragTarget) setPointerFromEvent(event);
+  if (press && !dragMoved && Math.hypot(event.clientX - press.sx, event.clientY - press.sy) > CLICK_SLOP) {
+    press.moved = true;
+    if (dragTarget) { dragMoved = true; dragTarget.userData.physics.active = true; }
+  }
 });
 
-window.addEventListener('pointerup', () => {
+function endPress(event, cancelled) {
+  const wasClick = press && !press.moved && !cancelled;
+  const name = press && press.name;
+  press = null;
   if (dragTarget) release();
-});
+  if (wasClick) handleClick(name);
+}
+window.addEventListener('pointerup', (e) => endPress(e, false));
+window.addEventListener('pointercancel', (e) => endPress(e, true));
 
 // Moves the currently-dragged object to follow the cursor (clamped to the
 // blanket/basket, same as everything else) and records how fast it's
@@ -632,7 +711,7 @@ window.addEventListener('pointerup', () => {
 // naturally settles to ~0 if you hold it still before letting go, instead
 // of keying off a single stale mousemove.
 function updateDrag(dt) {
-  if (!dragTarget || dt <= 0) return;
+  if (!dragTarget || !dragMoved || dt <= 0) return;
   raycaster.setFromCamera(pointer, camera);
   if (!raycaster.ray.intersectPlane(dragPlane, dragGroundHit)) return;
   const p = dragTarget.userData.physics;
@@ -828,6 +907,8 @@ function animate() {
   orbit.update();
   updateDrag(dt);
   updatePhysics(dt);
+  updateFlashes(dt);
+  drawPlayhead();
   renderer.render(scene, camera);
 }
 

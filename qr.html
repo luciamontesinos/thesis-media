@@ -140,28 +140,7 @@
       font-family: 'Outfit', monospace;
     }
 
-    #theme-toggle {
-      position: fixed;
-      bottom: 1.75rem;
-      right: 1.75rem;
-      z-index: 50;
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 400;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--accent);
-      padding: 0.35rem 0.85rem;
-      cursor: pointer;
-      letter-spacing: 0.06em;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
 
-    #theme-toggle:hover {
-      background: var(--hover-bg);
-      color: var(--hover-text);
-      border-color: var(--hover-bg);
-    }
 
     @media print {
       body { background: #fff; }
@@ -177,14 +156,16 @@
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
 
   <nav class="site-nav">
     <a href="index.html" class="site-name">Supplementary Material</a>
     <div class="nav-links">
-      <a href="index.html">Figures</a>
-      <a href="info.html">About</a>
+      <a href="index.html">About</a>
+      <a href="figures.html">Figures</a>
+      <button id="theme-toggle" onclick="toggleTheme()"></button>
     </div>
   </nav>
 
@@ -197,7 +178,6 @@
     <div id="grid"></div>
   </main>
 
-  <button id="theme-toggle" onclick="toggleTheme()"></button>
 
   <script src="media.js"></script>
   <script>
@@ -214,10 +194,10 @@
       document.getElementById('theme-toggle').textContent = t === 'dark' ? 'Light' : 'Dark';
     }
 
-    var base = window.location.href.replace(/qr\.html.*$/, 'index.html');
+    var base = window.location.href.replace(/qr\.html.*$/, 'figure.html');
     var grid = document.getElementById('grid');
 
-    MEDIA.forEach(function(item) {
+    MEDIA.forEach(function(item, index) {
       var url = base + '#' + item.id;
 
       var card = document.createElement('div');
@@ -225,12 +205,12 @@
 
       var img = document.createElement('img');
       img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=6&data=' + encodeURIComponent(url);
-      img.alt = item.id;
+      img.alt = 'Figure ' + (index + 1);
       card.appendChild(img);
 
       var label = document.createElement('div');
       label.className = 'label';
-      label.textContent = item.id;
+      label.textContent = 'Figure ' + (index + 1);
       card.appendChild(label);
 
       var title = document.createElement('div');

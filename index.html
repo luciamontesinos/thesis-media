@@ -39,7 +39,6 @@
       transition: background 0.2s, color 0.2s;
     }
 
-    /* ── nav ── */
     .site-nav {
       display: flex;
       align-items: center;
@@ -75,188 +74,163 @@
 
     .nav-links a:hover { color: var(--text); }
 
-    /* ── item header ── */
-    #item-header {
-      padding: 1.5rem 2rem 1.2rem;
-      border-bottom: 1px solid var(--border);
-      max-width: 900px;
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    #item-label {
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    #item-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-top: 0.35rem;
-      line-height: 1.3;
-      color: var(--text);
-    }
-
-    /* ── main ── */
     main {
-      flex: 1;
-      max-width: 900px;
+      max-width: 640px;
       width: 100%;
       margin: 0 auto;
-      padding: 2rem 2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
+      padding: 3rem 2rem 5rem;
     }
 
-    #media-container {
-      width: 100%;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.25rem;
-      min-height: 280px;
-    }
-
-    #media-container iframe {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border: none;
-      background: #000;
-    }
-
-    #media-container iframe.model-frame {
-      aspect-ratio: 4 / 3;
-      border-radius: 2px;
-    }
-
-    #media-container img {
-      max-width: 100%;
-      max-height: 62vh;
-      object-fit: contain;
-      display: block;
-    }
-
-    #item-caption {
-      font-size: 0.92rem;
-      color: var(--subtle);
-      font-style: italic;
-      line-height: 1.7;
-      margin-bottom: 1.75rem;
-      min-height: 1.2em;
-    }
-
-    /* ── prev/next ── */
-    nav.item-nav {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      border-top: 1px solid var(--border);
-      padding-top: 1.25rem;
-    }
-
-    nav.item-nav button {
+    h1 {
       font-family: 'Outfit', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 400;
-      background: none;
-      border: 1px solid var(--border);
-      padding: 0.45rem 1.1rem;
-      cursor: pointer;
+      font-weight: 600;
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
       color: var(--text);
-      letter-spacing: 0.03em;
-      transition: background 0.12s, color 0.12s, border-color 0.12s;
     }
 
-    nav.item-nav button:hover:not(:disabled) {
-      background: var(--hover-bg);
-      color: var(--hover-text);
-      border-color: var(--hover-bg);
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 400;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 2.5rem;
+      margin-bottom: 0.9rem;
     }
 
-    nav.item-nav button:disabled { opacity: 0.25; cursor: default; }
+    p {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
 
-    #counter {
+    p a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    p a:hover { text-decoration: underline; }
+
+    /* ── figure list ── */
+    #figure-list {
+      margin-top: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .figure-row {
+      display: grid;
+      grid-template-columns: 2.2rem 7rem 1fr auto;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      transition: color 0.12s;
+    }
+
+    .fig-num {
       font-family: 'Outfit', sans-serif;
       font-size: 0.78rem;
-      font-weight: 300;
-      color: var(--accent);
-      flex: 1;
-      text-align: center;
-      letter-spacing: 0.06em;
+      font-weight: 500;
+      color: var(--subtle);
+      font-variant-numeric: tabular-nums;
     }
 
-    #not-found {
-      display: none;
-      text-align: center;
+    .figure-row:hover { color: var(--subtle); }
+
+    .fig-id {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+
+    .fig-title {
+      font-size: 0.97rem;
+      line-height: 1.4;
+    }
+
+    .fig-type {
+      white-space: nowrap;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
       color: var(--subtle);
-      font-style: italic;
-      padding: 4rem 1rem;
+      text-align: right;
     }
 
     /* ── theme toggle ── */
-    #theme-toggle {
-      position: fixed;
-      bottom: 1.75rem;
-      right: 1.75rem;
-      z-index: 50;
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 400;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--subtle);
-      padding: 0.35rem 0.85rem;
-      cursor: pointer;
-      letter-spacing: 0.06em;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
 
-    #theme-toggle:hover {
-      background: var(--hover-bg);
-      color: var(--hover-text);
-      border-color: var(--hover-bg);
+
+    /* ── responsive ── */
+    @media (max-width: 640px) {
+      .site-nav { padding: 0.75rem 1rem; gap: 1rem; }
+      .nav-links { gap: 1rem; }
+      .site-name { font-size: 0.7rem; }
+    }
+    @media (max-width: 640px) {
+      main { padding: 2rem 1rem 4.5rem; }
+      h1 { font-size: 1.6rem; margin-bottom: 1.75rem; }
+      .figure-row { grid-template-columns: 1.8rem 1fr auto; gap: 0.25rem 0.75rem; }
+      .fig-id { grid-column: 2 / 4; grid-row: 1; }
+      .fig-num { grid-row: 1 / 3; }
+      .fig-title { grid-column: 2; grid-row: 2; }
+      .fig-type { grid-column: 3; grid-row: 2; }
     }
   </style>
   <script>
+    if (location.hash.length > 1) location.replace("figure.html" + location.hash);
     (function() {
       var t = localStorage.getItem('theme') || 'light';
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
 
   <nav class="site-nav">
     <a href="index.html" class="site-name">Supplementary Material</a>
     <div class="nav-links">
-      <a href="index.html">Figures</a>
-      <a href="info.html">About</a>
+      <a href="index.html">About</a>
+      <a href="figures.html">Figures</a>
+      <button id="theme-toggle" onclick="toggleTheme()"></button>
     </div>
   </nav>
 
-  <div id="item-header">
-    <div id="item-label"></div>
-    <h1 id="item-title"></h1>
-  </div>
-
   <main>
-    <div id="not-found">Item not found. Check the URL.</div>
-    <div id="media-container"></div>
-    <p id="item-caption"></p>
-    <nav class="item-nav">
-      <button id="prev-btn">&#8592; Prev</button>
-      <span id="counter"></span>
-      <button id="next-btn">Next &#8594;</button>
-    </nav>
+    <h1>Supplementary<br>Audiovisual Material</h1>
+
+    <h2>About this site</h2>
+    <p>
+      This website is a companion to the PhD dissertation
+      <em><!-- Insert your thesis title here --></em>
+      by Lucia Montesinos<!-- (Institution, Year) -->.
+    </p>
+    <p>
+      Throughout the thesis, certain passages are accompanied by audiovisual material —
+      recordings, images, and video excerpts — that complement or extend the written argument.
+      This site collects all of that material in one place.
+    </p>
+
+    <h2>How to navigate</h2>
+    <p>
+      Each figure in the thesis carries a QR code or short URL. Scanning or following it opens
+      that specific item directly. Once on the site, you can move through the full collection
+      using the <em>Prev</em> and <em>Next</em> buttons, or jump to any item from the
+      <a href="figures.html">list of figures</a>.
+    </p>
+
   </main>
 
-  <button id="theme-toggle" onclick="toggleTheme()"></button>
 
   <script src="media.js"></script>
   <script>
@@ -273,100 +247,7 @@
       document.getElementById('theme-toggle').textContent = t === 'dark' ? 'Light' : 'Dark';
     }
 
-    function youtubeId(url) {
-      var m = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-      return m ? m[1] : null;
-    }
-
-    function renderMedia(item) {
-      var c = document.getElementById('media-container');
-      c.innerHTML = '';
-
-      if (item.type === 'youtube') {
-        var iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube.com/embed/' + youtubeId(item.url);
-        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-        iframe.allowFullscreen = true;
-        c.appendChild(iframe);
-
-      } else if (item.type === 'image') {
-        var img = document.createElement('img');
-        img.src = item.url;
-        img.alt = item.title;
-        c.appendChild(img);
-
-      } else if (item.type === 'audio') {
-        var wrap = document.createElement('div');
-        wrap.style.cssText = 'width:100%;padding:2rem 0;';
-        var audio = document.createElement('audio');
-        audio.controls = true;
-        audio.style.width = '100%';
-        audio.src = item.url;
-        wrap.appendChild(audio);
-        c.appendChild(wrap);
-
-      } else if (item.type === 'model') {
-        var iframe = document.createElement('iframe');
-        iframe.src = item.url;
-        iframe.className = 'model-frame';
-        iframe.allow = 'accelerometer; gyroscope';
-        c.appendChild(iframe);
-      }
-    }
-
-    function show(index) {
-      var item = MEDIA[index];
-      var notFound = document.getElementById('not-found');
-      var mediaContainer = document.getElementById('media-container');
-
-      if (!item) {
-        notFound.style.display = 'block';
-        mediaContainer.style.display = 'none';
-        return;
-      }
-
-      notFound.style.display = 'none';
-      mediaContainer.style.display = 'flex';
-
-      document.getElementById('item-label').textContent = item.id;
-      document.getElementById('item-title').textContent = item.title;
-      document.getElementById('item-caption').textContent = item.caption || '';
-      document.getElementById('counter').textContent = (index + 1) + ' / ' + MEDIA.length;
-      document.getElementById('prev-btn').disabled = index === 0;
-      document.getElementById('next-btn').disabled = index === MEDIA.length - 1;
-      document.title = item.id + ' — ' + item.title;
-
-      localStorage.setItem('lastFigure', item.id);
-      renderMedia(item);
-    }
-
-    function currentIndex() {
-      var hash = window.location.hash.slice(1);
-      if (hash) {
-        var i = MEDIA.findIndex(function(m) { return m.id === hash; });
-        if (i !== -1) return i;
-      }
-      var last = localStorage.getItem('lastFigure');
-      if (last) {
-        var i = MEDIA.findIndex(function(m) { return m.id === last; });
-        if (i !== -1) return i;
-      }
-      return 0;
-    }
-
-    document.getElementById('prev-btn').addEventListener('click', function() {
-      var i = currentIndex();
-      if (i > 0) window.location.hash = MEDIA[i - 1].id;
-    });
-
-    document.getElementById('next-btn').addEventListener('click', function() {
-      var i = currentIndex();
-      if (i < MEDIA.length - 1) window.location.hash = MEDIA[i + 1].id;
-    });
-
-    window.addEventListener('hashchange', function() { show(currentIndex()); });
     updateToggleLabel();
-    show(currentIndex());
   </script>
 </body>
 </html>

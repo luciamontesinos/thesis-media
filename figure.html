@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Figure — Supplementary Material</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #ffffff;
+      --text:       #1a1a1a;
+      --accent:     #FF0000;
+      --subtle:     #666;
+      --border:     #e0e0e0;
+      --hover-bg:   #1a1a1a;
+      --hover-text: #ffffff;
+    }
+    [data-theme="dark"] {
+      --bg:         #0d0d0d;
+      --text:       #ebebeb;
+      --accent:     #FF0000;
+      --subtle:     #999;
+      --border:     #2a2a2a;
+      --hover-bg:   #ebebeb;
+      --hover-text: #0d0d0d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Newsreader', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    /* ── nav ── */
+    .site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .site-name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--subtle);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── item header ── */
+    #item-header {
+      padding: 1.5rem 2rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    #item-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    #item-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 0;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    /* ── main ── */
+    main {
+      flex: 1;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #media-container {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      min-height: 280px;
+    }
+
+    #media-container iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      background: #000;
+    }
+
+    #media-container iframe.model-frame {
+      aspect-ratio: 4 / 3;
+      border-radius: 2px;
+    }
+
+    #media-container img {
+      max-width: 100%;
+      max-height: 62vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    #item-caption {
+      font-size: 0.92rem;
+      color: var(--subtle);
+      font-style: italic;
+      line-height: 1.7;
+      margin-bottom: 1.75rem;
+      min-height: 1.2em;
+    }
+
+    /* ── prev/next ── */
+    nav.item-nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.25rem;
+    }
+
+    nav.item-nav button {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      background: none;
+      border: 1px solid var(--border);
+      padding: 0.45rem 1.1rem;
+      cursor: pointer;
+      color: var(--text);
+      letter-spacing: 0.03em;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+
+    nav.item-nav button:hover:not(:disabled) {
+      background: var(--hover-bg);
+      color: var(--hover-text);
+      border-color: var(--hover-bg);
+    }
+
+    nav.item-nav button:disabled { opacity: 0.25; cursor: default; }
+
+    #counter {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--accent);
+      flex: 1;
+      text-align: center;
+      letter-spacing: 0.06em;
+    }
+
+    #not-found {
+      display: none;
+      text-align: center;
+      color: var(--subtle);
+      font-style: italic;
+      padding: 4rem 1rem;
+    }
+
+    /* ── theme toggle ── */
+
+
+    /* ── responsive ── */
+    @media (max-width: 640px) {
+      .site-nav { padding: 0.75rem 1rem; gap: 1rem; }
+      .nav-links { gap: 1rem; }
+      .site-name { font-size: 0.7rem; }
+    }
+    @media (max-width: 640px) {
+      #item-header { padding: 1.1rem 1rem 1rem; }
+      #item-title { font-size: 1.25rem; }
+      main { padding: 1.25rem 1rem 4.5rem; }
+      #media-container { min-height: 0; margin-bottom: 1rem; }
+      #media-container iframe.model-frame { aspect-ratio: 3 / 4; max-height: 70vh; }
+      nav.item-nav { gap: 0.5rem; }
+      nav.item-nav button { padding: 0.45rem 0.8rem; }
+    }
+  </style>
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="site-name">Supplementary Material</a>
+    <div class="nav-links">
+      <a href="index.html">About</a>
+      <a href="figures.html">Figures</a>
+      <button id="theme-toggle" onclick="toggleTheme()"></button>
+    </div>
+  </nav>
+
+  <div id="item-header">
+    <div id="item-heading">
+      <span id="item-badge"></span>
+      <h1 id="item-title"></h1>
+    </div>
+    <nav class="item-nav">
+      <button id="prev-btn" aria-label="Previous figure">&#8592;</button>
+      <span id="counter"></span>
+      <button id="next-btn" aria-label="Next figure">&#8594;</button>
+    </nav>
+  </div>
+
+  <main>
+    <div id="not-found">Item not found. Check the URL.</div>
+    <div id="media-container"></div>
+    <div id="item-caption"></div>
+  </main>
+
+
+  <script src="media.js"></script>
+  <script>
+    function toggleTheme() {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateToggleLabel();
+    }
+
+    function updateToggleLabel() {
+      var t = document.documentElement.getAttribute('data-theme');
+      document.getElementById('theme-toggle').textContent = t === 'dark' ? 'Light' : 'Dark';
+    }
+
+    function youtubeId(url) {
+      var m = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+      return m ? m[1] : null;
+    }
+
+    function renderMedia(item) {
+      var c = document.getElementById('media-container');
+      c.innerHTML = '';
+
+      if (item.type === 'youtube') {
+        var iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/' + youtubeId(item.url);
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+        c.appendChild(iframe);
+
+      } else if (item.type === 'image') {
+        var img = document.createElement('img');
+        img.src = item.url;
+        img.alt = item.title;
+        c.appendChild(img);
+
+      } else if (item.type === 'audio') {
+        var wrap = document.createElement('div');
+        wrap.style.cssText = 'width:100%;padding:2rem 0;';
+        var audio = document.createElement('audio');
+        audio.controls = true;
+        audio.style.width = '100%';
+        audio.src = item.url;
+        wrap.appendChild(audio);
+        c.appendChild(wrap);
+
+      } else if (item.type === 'model') {
+        var iframe = document.createElement('iframe');
+        iframe.src = item.url;
+        iframe.className = 'model-frame';
+        iframe.allow = 'accelerometer; gyroscope';
+        c.appendChild(iframe);
+      }
+    }
+
+    // caption mini-format: "# Heading", "- **Label** text" rows, anything else is a paragraph
+    function renderCaption(text) {
+      var box = document.getElementById('item-caption');
+      box.innerHTML = '';
+      var card = null, list = null;
+      function fmt(t) {
+        return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      }
+      function target() {   // lines before any heading go straight into the caption
+        return card || box;
+      }
+      (text || '').split('\n').forEach(function(line) {
+        line = line.trim();
+        if (!line) { list = null; return; }
+        if (line.indexOf('# ') === 0) {
+          list = null;
+          card = document.createElement('section');
+          card.className = 'cap-card';
+          var h = document.createElement('h3'); h.textContent = line.slice(2);
+          card.appendChild(h);
+          box.appendChild(card);
+        } else if (line.indexOf('- ') === 0) {
+          if (!list) { list = document.createElement('ul'); target().appendChild(list); }
+          var li = document.createElement('li'); li.innerHTML = fmt(line.slice(2)); list.appendChild(li);
+        } else {
+          list = null;
+          var p = document.createElement('p'); p.innerHTML = fmt(line); target().appendChild(p);
+        }
+      });
+      box.classList.toggle('has-cards', !!box.querySelector('.cap-card'));
+      if (box.children.length && !box.querySelector('.cap-card')) {   // plain text: same card, no heading
+        var only = document.createElement('section');
+        only.className = 'cap-card cap-plain';
+        while (box.firstChild) only.appendChild(box.firstChild);
+        box.appendChild(only);
+      }
+    }
+
+    function show(index) {
+      var item = MEDIA[index];
+      var notFound = document.getElementById('not-found');
+      var mediaContainer = document.getElementById('media-container');
+
+      if (!item) {
+        notFound.style.display = 'block';
+        mediaContainer.style.display = 'none';
+        return;
+      }
+
+      notFound.style.display = 'none';
+      mediaContainer.style.display = 'flex';
+
+      var badge = document.getElementById('item-badge');
+      badge.innerHTML = '';
+      badge.appendChild(figBadge(index + 1));
+      document.getElementById('item-title').textContent = item.title;
+      renderCaption(item.caption);
+      document.getElementById('counter').textContent = (index + 1) + ' / ' + MEDIA.length;
+      document.getElementById('prev-btn').disabled = index === 0;
+      document.getElementById('next-btn').disabled = index === MEDIA.length - 1;
+      document.title = 'Figure ' + (index + 1) + ' — ' + item.title;
+
+      localStorage.setItem('lastFigure', item.id);
+      renderMedia(item);
+    }
+
+    function currentIndex() {
+      var hash = window.location.hash.slice(1);
+      if (hash) {
+        var i = MEDIA.findIndex(function(m) { return m.id === hash; });
+        if (i !== -1) return i;
+      }
+      var last = localStorage.getItem('lastFigure');
+      if (last) {
+        var i = MEDIA.findIndex(function(m) { return m.id === last; });
+        if (i !== -1) return i;
+      }
+      return 0;
+    }
+
+    document.getElementById('prev-btn').addEventListener('click', function() {
+      var i = currentIndex();
+      if (i > 0) window.location.hash = MEDIA[i - 1].id;
+    });
+
+    document.getElementById('next-btn').addEventListener('click', function() {
+      var i = currentIndex();
+      if (i < MEDIA.length - 1) window.location.hash = MEDIA[i + 1].id;
+    });
+
+    window.addEventListener('hashchange', function() { show(currentIndex()); });
+    updateToggleLabel();
+    show(currentIndex());
+  </script>
+</body>
+</html>
