@@ -82,13 +82,13 @@ const MEDIA = [
     id: "tablemanners-demo",
     title: "Participants playing Table Manners",
     type: "youtube",
-    url: "https://youtu.be/vzOZoCOCKr0"
+    url: "https://youtu.be/dpRcuhvTsHY"
   },
   {
     id: "tablemanners-sounds",
     title: "The sounds of Table Manners",
-    type: "audio",
-    url: "https://youtu.be/vzOZoCOCKr0"
+     type: "audio",
+    url: "audios/TableManners/TableMannersSounds.mp3"
   }
 
 ];
