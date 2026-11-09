@@ -7,13 +7,7 @@
 <link rel="stylesheet" href="../shared/style.css">
 </head>
 <body>
-<details id="hud" open>
-  <summary>Controls</summary>
-  <div class="hud-body">
-    <label class="row"><input type="checkbox" id="recordMode"> Tap to record (touch screens)</label>
-    <div class="btns"><button id="reset">Reset scene</button></div>
-  </div>
-</details>
+<div id="hud" class="solo"><div class="btns"><button id="reset">Reset scene</button></div></div>
 
 <div id="toast"></div>
 
@@ -438,7 +432,7 @@ function toast(msg, ms = 2600) {
   toastTimer = setTimeout(() => { toastEl.style.opacity = 0; }, ms);
 }
 
-// ---------- sound: record (right-click) and play (click) ----------
+// ---------- sound: record (click or tap); objects play when brought together ----------
 const RECORD_MS = 1000;
 const FLASH_MS = 400;
 let micStream = null;
@@ -450,11 +444,17 @@ async function recordSound(obj) {
   recordingObj = obj;
   const name = obj.userData.name;
   try {
+    if (!navigator.mediaDevices?.getUserMedia) throw Object.assign(new Error('no mediaDevices'), { name: 'InsecureContext' });
     micStream ??= await navigator.mediaDevices.getUserMedia({ audio: true });
   } catch (err) {
     recordingObj = null;
     console.error(err);
-    toast('Microphone access is needed to record', 3500);
+    const inFrame = window.self !== window.top;
+    toast(
+      err.name === 'InsecureContext' ? 'Recording needs a secure (https) page' :
+      err.name === 'NotFoundError' ? 'No microphone found on this device' :
+      inFrame ? 'Microphone blocked. Allow it in the browser’s site settings, or open this model on its own page' :
+      'Microphone blocked. Allow it in the browser’s site settings, then try again', 6000);
     return;
   }
   const myEpoch = epoch;
@@ -467,20 +467,11 @@ async function recordSound(obj) {
     obj.userData.url = URL.createObjectURL(new Blob(chunks, { type: rec.mimeType }));
     obj.userData.audio = new Audio(obj.userData.url);
     recordingObj = null;
-    toast(`${name}: sound saved – click it to play`);
+    toast(`${name}: sound saved – bring it against another object to play`);
   };
   rec.start();
   toast(`● Recording ${name}…`, RECORD_MS + 200);
   setTimeout(() => rec.stop(), RECORD_MS);
-}
-
-function playSound(obj) {
-  const { audio, name } = obj.userData;
-  if (!audio) {
-    toast(`${name} has no sound yet – right-click it to record one`);
-    return;
-  }
-  triggerSound(obj);
 }
 
 function triggerSound(obj) {
@@ -489,7 +480,7 @@ function triggerSound(obj) {
   obj.userData.flashUntil = performance.now() + FLASH_MS;
 }
 
-// ---------- pointer interaction: drag, click, right-click ----------
+// ---------- pointer interaction: drag, click ----------
 const ray = new THREE.Raycaster();
 const ndc = new THREE.Vector2();
 const CLICK_SLOP = 5; // px of movement still counted as a click
@@ -508,21 +499,20 @@ function pick(e) {
 let drag = null;
 // capture phase + controls.enabled=false keeps OrbitControls from also reacting
 canvas.addEventListener('pointerdown', (e) => {
-  if (e.button === 1) return;
+  if (e.button !== 0) return;   // right/middle buttons stay with the camera
   const hit = pick(e);
   if (!hit) return;
   controls.enabled = false;
   const isPerson = hit.object === person;
 
-  const right = e.button === 2 || (e.button === 0 && (e.ctrlKey || document.getElementById('recordMode').checked));
   const normal = new THREE.Vector3(0, 1, 0);          // normal drag slides along the floor plane
-  if (e.shiftKey && !right) {                          // shift-drag slides on a vertical plane
+  if (e.shiftKey) {                          // shift-drag slides on a vertical plane
     camera.getWorldDirection(normal).setY(0);
     if (normal.lengthSq() < 1e-6) normal.set(0, 0, 1);
     normal.normalize();
   }
   drag = {
-    obj: hit.object, right, y: hit.object.position.y, targetY: hit.object.position.y, rotate: (e.metaKey || e.altKey) && !right, lift: e.shiftKey && !right && !isPerson, moved: false,
+    obj: hit.object, y: hit.object.position.y, targetY: hit.object.position.y, rotate: e.metaKey || e.altKey, lift: e.shiftKey && !isPerson, moved: false,
     sx: e.clientX, sy: e.clientY, lx: e.clientX, ly: e.clientY,
     plane: new THREE.Plane().setFromNormalAndCoplanarPoint(normal, hit.point),
     offset: hit.point.clone().sub(hit.object.position),
@@ -536,7 +526,6 @@ canvas.addEventListener('pointermove', (e) => {
     canvas.style.cursor = pick(e) ? 'grab' : 'default';
     return;
   }
-  if (drag.right) return;
   if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < CLICK_SLOP) return;
   drag.moved = true;
   canvas.style.cursor = 'grabbing';
@@ -571,7 +560,7 @@ canvas.addEventListener('pointermove', (e) => {
 
 canvas.addEventListener('pointerup', (e) => {
   if (!drag) return;
-  const { obj, right, moved, sx, sy } = drag;
+  const { obj, moved, sx, sy } = drag;
   drag = null;
   controls.enabled = true;
   canvas.releasePointerCapture(e.pointerId);
@@ -579,7 +568,7 @@ canvas.addEventListener('pointerup', (e) => {
   if (obj === person) return;   // nothing to play or record
   if (moved) { settleAll(); return; }
   if (Math.hypot(e.clientX - sx, e.clientY - sy) >= CLICK_SLOP) return;
-  right ? recordSound(obj) : playSound(obj);
+  recordSound(obj);   // a click records a new sound; bringing two objects together plays them
 });
 
 // scrolling over an object turns it instead of zooming the camera
@@ -643,7 +632,7 @@ renderer.setAnimationLoop(() => {
   const dt = Math.min(0.05, (now - lastT) / 1000);
   lastT = now;
   stepFalls(now);
-  if (drag && drag.moved && !drag.rotate && !drag.right && !drag.lift) {   // ease up/down instead of jumping
+  if (drag && drag.moved && !drag.rotate && !drag.lift) {   // ease up/down instead of jumping
     const y = drag.y + (drag.targetY - drag.y) * (1 - Math.exp(-dt * 14));
     if (Math.abs(y - drag.y) > 1e-5) {
       drag.y = y;

@@ -307,22 +307,19 @@
         var iframe = document.createElement('iframe');
         iframe.src = item.url;
         iframe.className = 'model-frame';
-        iframe.allow = 'accelerometer; gyroscope';
+        iframe.allow = 'accelerometer; gyroscope; microphone';   // Table Manners records sounds
         c.appendChild(iframe);
       }
     }
 
-    // caption mini-format: "# Heading", "- **Label** text" rows, anything else is a paragraph
+    // caption mini-format: "# Heading" starts a card, "- **Action** text" is one line in it, anything else is a paragraph
     function renderCaption(text) {
       var box = document.getElementById('item-caption');
       box.innerHTML = '';
-      var card = null, list = null;
       function fmt(t) {
         return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
       }
-      function target() {   // lines before any heading go straight into the caption
-        return card || box;
-      }
+      var card = null, list = null;
       (text || '').split('\n').forEach(function(line) {
         line = line.trim();
         if (!line) { list = null; return; }
@@ -334,11 +331,12 @@
           card.appendChild(h);
           box.appendChild(card);
         } else if (line.indexOf('- ') === 0) {
-          if (!list) { list = document.createElement('ul'); target().appendChild(list); }
+          var host = card || box;
+          if (!list) { list = document.createElement('ul'); host.appendChild(list); }
           var li = document.createElement('li'); li.innerHTML = fmt(line.slice(2)); list.appendChild(li);
         } else {
           list = null;
-          var p = document.createElement('p'); p.innerHTML = fmt(line); target().appendChild(p);
+          var p = document.createElement('p'); p.innerHTML = fmt(line); (card || box).appendChild(p);
         }
       });
       box.classList.toggle('has-cards', !!box.querySelector('.cap-card'));

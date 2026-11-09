@@ -24,6 +24,14 @@
 html, body { margin: 0; height: 100%; overflow: hidden; background: #d9d7d2; font-family: system-ui, sans-serif; }
 canvas { display: block; touch-action: none; }
 
+/* touch screens: long-pressing the scene must not select it or open the copy/paste callout */
+html, body, canvas {
+  -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#hud input[type=range] { touch-action: pan-x; }
+
 /* ── control panel ── */
 #hud {
   position: fixed; left: 16px; top: 16px; z-index: 10;
@@ -33,6 +41,8 @@ canvas { display: block; touch-action: none; }
   font-size: 13px; line-height: 1.55;
   -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
 }
+#hud.solo { width: auto; padding: 8px 10px; }
+#hud.solo .btns { margin-top: 0; }
 #hud summary {
   display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
   padding: 11px 14px; cursor: pointer; font-weight: 700; list-style: none; user-select: none;

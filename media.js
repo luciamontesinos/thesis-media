@@ -14,18 +14,17 @@
 const MEDIA = [
   {
     id: "tubularium-demo",
-    title: "Tubularium — full demo",
+    title: "A full demonstration of Tubularium",
     type: "youtube",
-    url: "https://youtu.be/5Gbb4605J9A",
-    caption: "Demo of Tubularium"
+    url: "https://youtu.be/5Gbb4605J9A"
   },
 
   {
     id: "tubularium-model",
-    title: "Tubularium — interactive 3D model",
+    title: "An interactive 3D model of Tubularium",
     type: "model",
     url: "models/tubularium/",
-    caption: "# Playing\n- **Hover** a pipe to make it glow\n- **Click or hold** play the pipe; where you touch it sets the octave (top, middle, bottom)\n- **Mode** Melody: each pipe plays a note. Chords: each pipe plays a chord, and hovering the pink pipe advances the sequence\n- **LEDs** switch the lights inside the pipes on or off\n- **Light** slide towards the moon to darken the space and see the LEDs better\n# Camera\n- **Drag** orbit the view\n- **Right-drag** pan\n- **Scroll / pinch** zoom"
+    caption: "# Playing\n- **Click / tap / hold** a tube to play it\n- **Mode** switches between melody and chords\n- **LEDs** turn the lights on or off\n- **Light** slide to the moon to darken the room\n# Camera\n- **Drag** to orbit\n- **Scroll / pinch** to zoom"
   },
 
   // {
@@ -38,35 +37,32 @@ const MEDIA = [
 
   {
     id: "tubularium-sounds",
-    title: "Tubularium instrument sounds",
+    title: "The different instrument voices of Tubularium",
     type: "audio",
-    url: "audios/tubularium/TubuSounds.wav",
-    caption: "The different instrument voices of Tubularium"
+    url: "audios/tubularium/TubuSounds.wav"
   },
 
    {
     id: "tubularium-ai",
-    title: "Playback and AI in Tubularium",
+    title: "The playback and AI features of Tubularium",
     type: "youtube",
-    url: "https://youtu.be/GeJgnmoYQCo",
-    caption: "Playback and AI features in Tubularium"
+    url: "https://youtu.be/GeJgnmoYQCo"
   },
   
 
   {
     id: "picnic-demo",
-    title: "Picnic — full demo",
+    title: "A full demonstration of Picnic",
     type: "youtube",
-    url: "https://youtu.be/vzOZoCOCKr0",
-    caption: "Demo of picnic"
+    url: "https://youtu.be/vzOZoCOCKr0"
   },
 
   {
     id: "picnic-model",
-    title: "Picnic — interactive 3D model",
+    title: "An interactive 3D model of Picnic",
     type: "model",
     url: "models/picnic/",
-    caption: "# Playing\n- **Click an object** play it and add a hit to the loop (120 BPM, snapped to the nearest 16th note)\n- **Drag an object** move it; let go to throw it\n- **Click the glass** clear the loop\n# Camera\n- **Drag space** orbit the view\n- **Right-drag** pan\n- **Scroll / pinch** zoom\n# Instruments\n- **Cup** snare\n- **Bowl** kick 1\n- **Large plate** hi-hat 1\n- **Small plate** hi-hat 2\n- **Cutlery** clap\n- **Basket** kick 2"
+    caption: "# Playing\n- **Click / tap** an object to add it to the loop\n- **Click / tap** the glass to clear the loop\n- **Drag** to move the objects\n# Camera\n- **Drag** space to orbit\n- **Scroll / pinch** to zoom"
   },
   {
     id: "picnic-tawharanui",
@@ -77,24 +73,22 @@ const MEDIA = [
   },
    {
     id: "tablemanners-model",
-    title: "Table Manners — Interactive 3D Model",
+    title: "An interactive 3D model of Table Manners",
     type: "model",
     url: "models/tablemanners/",
-    caption: "# Playing\n- **Click** play the object's sound\n- **Right-click** record a new 1 s sound (or use “Tap to record” on touch screens)\n- **Drag** move an object (gravity applies)\n- **⌘ / Alt + drag** turn or tilt it\n- **Scroll over it** turn it\n- **Shift + drag** lift it\n# Camera\n- **Drag space** orbit the view\n- **Right-drag** pan\n- **Scroll / pinch** zoom"
+    caption: "# Playing\n- **Click / tap** an object to record a sound\n- **Drag** an object to move it; bring two objects together to play their sounds\n# Camera\n- **Drag** space to orbit\n- **Scroll / pinch** to zoom"
   },
   {
     id: "tablemanners-demo",
-    title: "Table Manners — Participants demo",
+    title: "Participants playing Table Manners",
     type: "youtube",
-    url: "https://youtu.be/vzOZoCOCKr0",
-    caption: "Demo of Table Manners with participants"
+    url: "https://youtu.be/vzOZoCOCKr0"
   },
   {
     id: "tablemanners-sounds",
-    title: "Picnic — Participants soundso",
+    title: "The sounds of Table Manners",
     type: "audio",
-    url: "https://youtu.be/vzOZoCOCKr0",
-    caption: "Sounds of Table Manners"
+    url: "https://youtu.be/vzOZoCOCKr0"
   }
 
 ];

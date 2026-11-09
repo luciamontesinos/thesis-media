@@ -671,6 +671,7 @@ function release() {
   orbit.enabled = true;
 }
 
+renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());   // no long-press menu on touch
 renderer.domElement.addEventListener('pointerdown', (event) => {
   if (event.target !== renderer.domElement) return;
   drums.unlock();   // browsers only start audio from inside a user gesture

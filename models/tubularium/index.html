@@ -636,6 +636,7 @@
     let pressedKey     = null;
     let pressedPipeVis = null;
 
+    renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());   // no long-press menu on touch
     renderer.domElement.addEventListener('pointerdown', e => {
       if (!ledPipes.length || e.button > 0) return;
       setPointerFrom(e);   // touch has no hover, so aim at the tap itself
